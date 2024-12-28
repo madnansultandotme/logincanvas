@@ -1,0 +1,100 @@
+/* LoginCanvas Login Page Styles */
+
+/* Main login container */
+#login {
+    position: relative;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px !important;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 80px auto !important;
+}
+
+/* Login form */
+#loginform {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* Form inputs */
+#loginform input[type="text"],
+#loginform input[type="password"] {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
+    margin: 8px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Submit button */
+#loginform #wp-submit {
+    background: #2271b1;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 10px 20px;
+    width: 100%;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+#loginform #wp-submit:hover {
+    background: #135e96;
+}
+
+/* Login page background */
+body.login {
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+/* Logo */
+.login h1 a {
+    background-size: contain !important;
+    width: 100% !important;
+    height: 80px !important;
+}
+
+/* Messages */
+.message,
+#login_error {
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Remember me checkbox */
+.forgetmenot {
+    margin: 15px 0;
+}
+
+/* Links */
+.login #nav,
+.login #backtoblog {
+    text-align: center;
+    padding: 0 !important;
+}
+
+.login #nav a,
+.login #backtoblog a {
+    color: #2271b1;
+    transition: color 0.3s ease;
+}
+
+.login #nav a:hover,
+.login #backtoblog a:hover {
+    color: #135e96;
+}
+
+/* Header/Footer Integration */
+.login-header,
+.login-footer {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    text-align: center;
+}
