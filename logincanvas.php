@@ -3,10 +3,10 @@
  * Plugin Name: LoginCanvas
  * Plugin URI: https://github.com/madnansultandotme/logincanvas
  * Description: Enhance your WordPress login page with random background images and header/footer support
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires at least: 5.0
  * Requires PHP: 7.2
- * Author: Muhammad Adnan Sultan
+ * Author: Team Zeppelin
  * Author URI: https://www.linkedin.com/in/dev-madnansultan/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 
 // Define plugin constants only if not already defined
 if (!defined('LOGINCANVAS_VERSION')) {
-    define('LOGINCANVAS_VERSION', '1.0.0');
+    define('LOGINCANVAS_VERSION', '1.0.1');
 }
 if (!defined('LOGINCANVAS_PLUGIN_DIR')) {
     define('LOGINCANVAS_PLUGIN_DIR', plugin_dir_path(__FILE__));
