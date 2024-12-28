@@ -45,19 +45,21 @@ if (!class_exists('LoginCanvas_Customizer')) {
             $wp_customize->add_setting('logincanvas_background_images', array(
                 'default' => '',
                 'sanitize_callback' => array($this, 'sanitize_background_images'),
+                'transport' => 'refresh'
             ));
 
-            $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'logincanvas_background_images', array(
+            $wp_customize->add_control(new WP_Customize_Upload_Control($wp_customize, 'logincanvas_background_images', array(
                 'label' => __('Background Images', 'logincanvas'),
-                'description' => __('Select multiple images. Hold Ctrl/Cmd to select multiple.', 'logincanvas'),
+                'description' => __('Click "Select Files" to open the media library. Hold Ctrl/Cmd to select multiple images.', 'logincanvas'),
                 'section' => 'logincanvas_settings',
-                'mime_type' => 'image',
+                'settings' => 'logincanvas_background_images',
                 'button_labels' => array(
-                    'select' => __('Select Images', 'logincanvas'),
-                    'change' => __('Change Images', 'logincanvas'),
+                    'select' => __('Select Files', 'logincanvas'),
+                    'change' => __('Change Files', 'logincanvas'),
                 ),
+                'type' => 'upload',
                 'active_callback' => function() {
-                    return get_theme_mod('logincanvas_background_type', 'image') === 'image';
+                    return get_theme_mod('logincanvas_background_type') === 'image';
                 }
             )));
 
@@ -72,10 +74,43 @@ if (!class_exists('LoginCanvas_Customizer')) {
                 'description' => __('Select a video file (MP4 recommended).', 'logincanvas'),
                 'section' => 'logincanvas_settings',
                 'mime_type' => 'video',
-                'active_callback' => function() {
-                    return get_theme_mod('logincanvas_background_type', 'image') === 'video';
-                }
             )));
+
+            // Add JavaScript for dynamic visibility
+            add_action('customize_controls_print_footer_scripts', function() {
+                ?>
+                <script>
+                (function($) {
+                    wp.customize('logincanvas_background_type', function(setting) {
+                        setting.bind(function(value) {
+                            var videoControl = $('#customize-control-logincanvas_background_video');
+                            var imageControl = $('#customize-control-logincanvas_background_images');
+                            
+                            if (value === 'video') {
+                                videoControl.show();
+                                imageControl.hide();
+                            } else {
+                                videoControl.hide();
+                                imageControl.show();
+                            }
+                        });
+                    });
+
+                    // Trigger initial state
+                    $(document).ready(function() {
+                        var initialValue = wp.customize('logincanvas_background_type').get();
+                        if (initialValue === 'video') {
+                            $('#customize-control-logincanvas_background_video').show();
+                            $('#customize-control-logincanvas_background_images').hide();
+                        } else {
+                            $('#customize-control-logincanvas_background_video').hide();
+                            $('#customize-control-logincanvas_background_images').show();
+                        }
+                    });
+                })(jQuery);
+                </script>
+                <?php
+            });
 
             // Header Footer Settings
             $wp_customize->add_setting('logincanvas_enable_header_footer', array(

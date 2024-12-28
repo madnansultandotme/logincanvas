@@ -110,6 +110,29 @@ if (!class_exists('LoginCanvas_Background')) {
                     z-index: -2;
                     object-fit: cover;
                 }
+
+                @media (min-aspect-ratio: 16/9) {
+                    .login-video-background {
+                        width: 100%;
+                        height: auto;
+                    }
+                }
+
+                @media (max-aspect-ratio: 16/9) {
+                    .login-video-background {
+                        width: auto;
+                        height: 100%;
+                    }
+                }
+
+                @media (max-width: 767px) {
+                    .login-video-background {
+                        display: none;
+                    }
+                    body.login {
+                        background: #f0f0f1;
+                    }
+                }
             </style>
             <video autoplay muted loop playsinline class="login-video-background">
                 <source src="<?php echo esc_url($video_url); ?>" type="video/mp4">

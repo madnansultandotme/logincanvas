@@ -2,6 +2,9 @@
 
 /* Main login container */
 #login {
+    text-align: center;
+    max-width: 450px;
+    width: 400px;
     position: relative;
     background: rgba(255, 255, 255, 0.9);
     padding: 40px !important;
@@ -14,7 +17,8 @@
 #loginform {
     background: transparent !important;
     box-shadow: none !important;
-    padding: 0 !important;
+    /* padding: 0 !important; */
+    border: none;
 }
 
 /* Form inputs */
@@ -47,12 +51,12 @@
 }
 
 /* Login page background */
-body.login {
+/* body.login {
     background-color: #f0f2f5;
     min-height: 100vh;
     display: flex;
     align-items: center;
-}
+} */
 
 /* Logo */
 .login h1 a {
@@ -92,9 +96,13 @@ body.login {
 }
 
 /* Header/Footer Integration */
-.login-header,
-.login-footer {
-    background: rgba(255, 255, 255, 0.9);
+.login-header
+ {
     padding: 20px;
     text-align: center;
 }
+/* .login-footer {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    text-align: center;
+} */

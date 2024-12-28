@@ -33,8 +33,8 @@ if (!class_exists('LoginCanvas_Header_Footer')) {
             // Add custom CSS to contain styles to header/footer
             $custom_css = "
                 .login-header, .login-footer {
+                margin: 0;
                     max-width: 100%;
-                    background: #fff;
                 }
                 .login-header {
                     position: relative;
@@ -46,7 +46,8 @@ if (!class_exists('LoginCanvas_Header_Footer')) {
                     margin-top: 40px;
                 }
                 #login {
-                    padding: 8% 0 40px !important;
+                  max-width: 450px;
+                   width: 400px;
                 }
                 .login-header *, .login-footer * {
                     box-sizing: border-box;
@@ -69,30 +70,22 @@ if (!class_exists('LoginCanvas_Header_Footer')) {
                 <?php get_header(); ?>
             </div>
             <?php
-            echo $this->sanitize_output(ob_get_clean());
+            echo ob_get_clean();
         }
 
         public function render_footer() {
+            // Check if footer is already rendered
+            if (did_action('get_footer')) {
+            return;
+            }
+
             ob_start();
             ?>
             <div class="login-footer">
-                <?php get_footer(); ?>
+            <?php get_footer(); ?>
             </div>
             <?php
-            echo $this->sanitize_output(ob_get_clean());
-        }
-
-        private function sanitize_output($content) {
-            // Remove scripts for security
-            $content = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $content);
-            
-            // Clean up any potential theme-specific issues
-            $content = preg_replace('/<body[^>]*>/', '', $content);
-            $content = preg_replace('/<\/body>/', '', $content);
-            $content = preg_replace('/<html[^>]*>/', '', $content);
-            $content = preg_replace('/<\/html>/', '', $content);
-            
-            return $content;
+            echo ob_get_clean();
         }
     }
 }
