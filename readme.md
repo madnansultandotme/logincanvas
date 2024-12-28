@@ -99,3 +99,11 @@ For support, please:
 - Background image randomization
 - Header/footer integration
 - Customizer controls
+## Team
+Developed by:
+- **Muhammad Adnan Sultan** ([LinkedIn](https://www.linkedin.com/in/dev-madnansultan/))
+- **Jaweria Saddique** ([Portfolio](https://www.linkedin.com/in/jaweria-siddique1/))
+- **Amna Abaidullah** ([GitHub](https://github.com/))
+
+## License
+GPL v2 or later. See [License](https://www.gnu.org/licenses/gpl-2.0.html) for details.
