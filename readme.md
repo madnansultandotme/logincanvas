@@ -1,4 +1,27 @@
+# WordSprint Developers Hackathon 6.0
+![LoginCanvas](assets/images/hackthon.jpg)
 # LoginCanvas Plugin Documentation
+## Problem Statement
+
+### Task 1: Random Background Images
+Implement functionality to allow users to select multiple background images through WordPress Customizer. These images will display randomly on the login page, enhancing visual variety and user experience.
+
+**Requirements:**
+- Multiple image selection in Customizer
+- Random image display on page load
+- Smooth background transitions
+
+### Task 2: Header/Footer Integration
+Add support for displaying the site's header and footer on the WordPress login page, which isn't available by default.
+
+**Requirements:**
+- Option to enable/disable header/footer
+- Seamless integration with login page
+- Maintain responsive design
+- Preserve login form functionality
+
+---
+
 
 ## Overview
 LoginCanvas is a WordPress plugin that enhances the login page experience by adding support for random background images and header/footer integration. This plugin is compatible with WordPress 6.4.3+ and PHP 8.3+.
