@@ -54,6 +54,7 @@ if (!class_exists('LoginCanvas_Background')) {
 
         private function render_image_background() {
             $background_images = get_theme_mod('logincanvas_background_images');
+            
             if (empty($background_images)) {
                 return;
             }
@@ -63,20 +64,34 @@ if (!class_exists('LoginCanvas_Background')) {
                 return;
             }
 
-            $random_image = $images[array_rand($images)];
-            $image_url = wp_get_attachment_url($random_image);
+            $image_urls = array();
+            foreach ($images as $image_id) {
+                $url = wp_get_attachment_url($image_id);
+                if ($url) {
+                    $image_urls[] = $url;
+                }
+            }
 
-            if ($image_url) {
+            if (!empty($image_urls)) {
                 ?>
                 <style type="text/css">
                     body.login {
-                        background-image: url(<?php echo esc_url($image_url); ?>);
+                        background-image: url(<?php echo esc_url($image_urls[0]); ?>);
                         background-size: cover;
                         background-position: center;
                         background-repeat: no-repeat;
                         position: relative;
+                        transition: background-image 1s ease-in-out;
                     }
                 </style>
+                <script>
+                    const images = <?php echo json_encode($image_urls); ?>;
+                    let currentIndex = 0;
+                    setInterval(() => {
+                        currentIndex = (currentIndex + 1) % images.length;
+                        document.body.style.backgroundImage = `url(${images[currentIndex]})`;
+                    }, 5000);
+                </script>
                 <div class="login-background-overlay"></div>
                 <?php
             }
