@@ -1,85 +1,121 @@
 <?php
-/**
- * LoginCanvas Customizer Class
- */
-
 if (!defined('ABSPATH')) {
     exit;
 }
 
-class LoginCanvas_Customizer {
-    private static $instance;
+if (!class_exists('LoginCanvas_Background')) {
+    class LoginCanvas_Background {
+        private static $instance = null;
 
-    public static function get_instance() {
-        if (null === self::$instance) {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
-
-    private function __construct() {
-        add_action('customize_register', array($this, 'register_customizer_settings'));
-    }
-
-    public function register_customizer_settings($wp_customize) {
-        // Add section for LoginCanvas settings
-        $wp_customize->add_section('logincanvas_settings', array(
-            'title' => __('LoginCanvas Settings', 'logincanvas'),
-            'priority' => 150,
-        ));
-
-        // Background Images Control
-        $wp_customize->add_setting('logincanvas_background_images', array(
-            'default' => '',
-            'sanitize_callback' => array($this, 'sanitize_background_images'),
-        ));
-
-        $wp_customize->add_control(new WP_Customize_Upload_Control($wp_customize, 'logincanvas_background_images', array(
-            'label' => __('Background Images', 'logincanvas'),
-            'description' => __('Select multiple images for random background display', 'logincanvas'),
-            'section' => 'logincanvas_settings',
-            'settings' => 'logincanvas_background_images',
-            'button_labels' => array(
-                'select' => __('Select Images', 'logincanvas'),
-                'change' => __('Change Images', 'logincanvas'),
-                'remove' => __('Remove', 'logincanvas'),
-                'default' => __('Default', 'logincanvas'),
-                'frame_title' => __('Select Background Images', 'logincanvas'),
-                'frame_button' => __('Choose Images', 'logincanvas'),
-            ),
-        )));
-
-        // Header Footer Toggle
-        $wp_customize->add_setting('logincanvas_enable_header_footer', array(
-            'default' => false,
-            'sanitize_callback' => 'rest_sanitize_boolean',
-        ));
-
-        $wp_customize->add_control('logincanvas_enable_header_footer', array(
-            'label' => __('Enable Header and Footer', 'logincanvas'),
-            'description' => __('Display site header and footer on login page', 'logincanvas'),
-            'section' => 'logincanvas_settings',
-            'type' => 'checkbox',
-        ));
-    }
-
-    public function sanitize_background_images($value) {
-        if (empty($value)) {
-            return '';
+        public static function get_instance() {
+            if (null === self::$instance) {
+                self::$instance = new self();
+            }
+            return self::$instance;
         }
 
-        $images = explode(',', $value);
-        $sanitized_images = array();
+        private function __construct() {
+            add_action('login_enqueue_scripts', array($this, 'enqueue_styles'));
+            add_action('login_header', array($this, 'output_background'));
+        }
 
-        foreach ($images as $image) {
-            if (wp_http_validate_url($image)) {
-                $sanitized_images[] = esc_url_raw($image);
+        public function enqueue_styles() {
+            wp_enqueue_style(
+                'logincanvas-style',
+                LOGINCANVAS_PLUGIN_URL . 'assets/css/login-style.css',
+                array(),
+                LOGINCANVAS_VERSION
+            );
+
+            // Add inline CSS for background overlay
+            $custom_css = "
+                .login-background-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.4);
+                    z-index: -1;
+                }
+            ";
+            wp_add_inline_style('logincanvas-style', $custom_css);
+        }
+
+        public function output_background() {
+            $background_type = get_theme_mod('logincanvas_background_type', 'image');
+
+            if ($background_type === 'video') {
+                $this->render_video_background();
+            } else {
+                $this->render_image_background();
             }
         }
 
-        return implode(',', $sanitized_images);
+        private function render_image_background() {
+            $background_images = get_theme_mod('logincanvas_background_images');
+            if (empty($background_images)) {
+                return;
+            }
+
+            $images = array_filter(explode(',', $background_images));
+            if (empty($images)) {
+                return;
+            }
+
+            $random_image = $images[array_rand($images)];
+            $image_url = wp_get_attachment_url($random_image);
+
+            if ($image_url) {
+                ?>
+                <style type="text/css">
+                    body.login {
+                        background-image: url(<?php echo esc_url($image_url); ?>);
+                        background-size: cover;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        position: relative;
+                    }
+                </style>
+                <div class="login-background-overlay"></div>
+                <?php
+            }
+        }
+
+        private function render_video_background() {
+            $video_id = get_theme_mod('logincanvas_background_video');
+            if (!$video_id) {
+                return;
+            }
+
+            $video_url = wp_get_attachment_url($video_id);
+            if (!$video_url) {
+                return;
+            }
+
+            ?>
+            <style type="text/css">
+                body.login {
+                    position: relative;
+                    background: transparent;
+                }
+                .login-video-background {
+                    position: fixed;
+                    right: 0;
+                    bottom: 0;
+                    min-width: 100%;
+                    min-height: 100%;
+                    width: auto;
+                    height: auto;
+                    z-index: -2;
+                    object-fit: cover;
+                }
+            </style>
+            <video autoplay muted loop playsinline class="login-video-background">
+                <source src="<?php echo esc_url($video_url); ?>" type="video/mp4">
+            </video>
+            <div class="login-background-overlay"></div>
+            <?php
+        }
     }
 }
-
-// Initialize Customizer
-LoginCanvas_Customizer::get_instance();
