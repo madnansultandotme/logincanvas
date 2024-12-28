@@ -23,6 +23,7 @@ if (!defined('ABSPATH')) {
 define('LOGINCANVAS_VERSION', '1.0.0');
 define('LOGINCANVAS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('LOGINCANVAS_PLUGIN_URL', plugin_dir_url(__FILE__));
+define( 'WP_DEBUG', true ); 
 
 // Plugin main class
 class LoginCanvas {
